@@ -15,7 +15,7 @@ module.exports = {
     brand:{type:Sequelize.STRING,
       allowNull:false
     },
-    desciption:{type:Sequelize.TEXT,
+    description:{type:Sequelize.TEXT,
       allowNull:false
     },
     createdAt:{type:Sequelize.DATE,
