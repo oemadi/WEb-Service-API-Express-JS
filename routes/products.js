@@ -5,6 +5,27 @@ const v = new Validator();
 
 const { Product } = require('../models');
 
+router.get('/', async (req, res) => {
+    const products = await Product.findAll();
+    return res.json(products  || {}) ;
+
+})
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+    const products = await Product.findByPk(id);
+    return res.json(products  || {});
+
+})
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+    let product = await Product.findByPk(id)
+    if (!product) {
+        return res.json({ message: 'Product not found' });
+    }
+    await product.destroy();
+    res.json({message:"Product Destroy."});
+
+})
 router.post('/', async (req, res) => {
     const schema = {
         name: 'string',
@@ -22,10 +43,10 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-    const id =  req.params.id;
+    const id = req.params.id;
     let product = await Product.findByPk(id)
-    if(!product){
-        return res.json({message:'Product not found'});
+    if (!product) {
+        return res.json({ message: 'Product not found' });
     }
     const schema = {
         name: 'string|optional',
@@ -34,7 +55,7 @@ router.put('/:id', async (req, res) => {
 
     }
     const validate = v.validate(req.body, schema);
-    
+
     if (validate.length) {
         return res.status(400).json(validate);
     }
